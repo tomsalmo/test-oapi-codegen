@@ -1,0 +1,87 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Minimal ping API server
+paths:
+  /ping:
+    get:
+      responses:
+        "200":
+          description: ping pong response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pong"
+  /tit/{userId}:
+    post:
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Tit"
+      responses:
+        "201":
+          description: tit for tat response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tat"
+        "422":
+          description: invalid body
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    # base types
+    Pong:
+      type: object
+      required:
+        - ping
+      properties:
+        ping:
+          type: string
+          example: pong
+    Tat:
+      type: object
+      required:
+        - tat
+      properties:
+        tat:
+          type: string
+          example: tat
+    Tit:
+      type: object
+      required:
+        - tit
+      properties:
+        tat:
+          type: string
+          example: tit
+    Error:
+      type: object
+      required:
+        - message
+        - type
+      properties:
+        message:
+          type: string
+          example: This action is not allowed
+        type:
+          type: string
+          example: NotAllowed
