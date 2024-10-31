@@ -1,3 +1,10 @@
 package handlers
 
-type Handler struct{}
+import "context"
+
+type Handler struct {
+	PingPongService interface {
+		Ping(ctx context.Context) error
+	}
+	TitForTatService interface{}
+}

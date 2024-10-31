@@ -10,6 +10,8 @@ import (
 	"github.com/oapi-codegen/runtime/strictmiddleware/nethttp"
 	"github.com/tomsalmo/test-oapi-codegen/internal/api"
 	"github.com/tomsalmo/test-oapi-codegen/internal/api/handlers"
+	"github.com/tomsalmo/test-oapi-codegen/internal/pingpong"
+	"github.com/tomsalmo/test-oapi-codegen/internal/titfortat"
 )
 
 func main() {
@@ -19,7 +21,10 @@ func main() {
 	defer stop()
 
 	mux := http.NewServeMux()
-	h := api.HandlerFromMux(api.NewStrictHandler(handlers.Handler{}, []nethttp.StrictHTTPMiddlewareFunc{}), mux)
+	h := api.HandlerFromMux(api.NewStrictHandler(handlers.Handler{
+		PingPongService:  pingpong.Service{},
+		TitForTatService: titfortat.Service{},
+	}, []nethttp.StrictHTTPMiddlewareFunc{}), mux)
 	server := &http.Server{
 		Addr: "localhost:9000",
 		BaseContext: func(l net.Listener) context.Context {
